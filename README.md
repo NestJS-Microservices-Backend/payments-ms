@@ -1,114 +1,80 @@
 # Payments Microservice
 
-This is a [NestJS](https://nestjs.com/) based microservice for handling payments with [Stripe](https://stripe.com/).
+This is a NestJS-based microservice for handling payment processing, integrated with Stripe.
 
 ## Description
 
-The Payments Microservice exposes an API to create payment sessions and handles the entire lifecycle of a payment process through Stripe.
-
----
+The Payments Microservice provides an API to create payment sessions and handle payment success/cancellation callbacks and Stripe webhooks.
 
 ## Getting Started
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/en/) (v18 or higher recommended)
-- [pnpm](https://pnpm.io/) installed globally (`npm install -g pnpm`)
-- A [Stripe](https://stripe.com/) account and API keys.
+- [Node.js](https://nodejs.org/) (v18 or higher recommended)
+- [pnpm](https://pnpm.io/) (or npm/yarn)
 
 ### Installation
 
-1.  **Clone the repository:**
+1.  Clone the repository:
     ```bash
     git clone <repository-url>
     ```
-
-2.  **Navigate to the project directory:**
+2.  Navigate to the project directory:
     ```bash
     cd payments-ms
     ```
-
-3.  **Install dependencies:**
+3.  Install dependencies:
     ```bash
     pnpm install
     ```
 
-4.  **Set up environment variables:**
-    Create a `.env` file by copying the template:
-    ```bash
-    cp .template.env .env
-    ```
-    Then, fill in the required variables in the `.env` file:
-    - `STRIPE_SECRET`: Your Stripe secret key.
-    - `BACKEND_BASE_URL`: The base URL where the service is running (e.g., `http://localhost:3000`).
-    - `STRIPE_ENDPOINT_SECRET`: Your Stripe webhook endpoint secret.
+### Environment Variables
 
----
+Create a `.env` file in the root of the project by copying the template:
+
+```bash
+cp .template.env .env
+```
+
+Then, fill in the required environment variables:
+
+- `PORT`: The port the application will run on (e.g., 3003).
+- `STRIPE_SECRET`: Your Stripe secret key.
+- `BACKEND_BASE_URL`: The base URL of this microservice, used for constructing redirect URLs for Stripe.
 
 ## Running the Application
 
+### Development
+
+To run the application in development mode with hot-reloading:
+
 ```bash
-# Development mode
-pnpm run start
-
-# Watch mode
 pnpm run start:dev
+```
 
-# Production mode
+The application will be available at `http://localhost:{PORT}`.
+
+### Production
+
+To build and run the application in production mode:
+
+```bash
+pnpm run build
 pnpm run start:prod
 ```
 
----
+## Available Scripts
 
-## Running Tests
-
-```bash
-# Unit tests
-pnpm run test
-
-# End-to-end (e2e) tests
-pnpm run test:e2e
-
-# Test coverage
-pnpm run test:cov
-```
-
----
+- `start`: Starts the application.
+- `start:dev`: Starts the application in watch mode.
+- `build`: Builds the application for production.
+- `format`: Formats the code using Prettier.
+- `lint`: Lints the code using ESLint.
+- `test`: Runs unit tests.
 
 ## API Endpoints
 
-### `POST /payments/create-payment-session`
-
-Creates a new Stripe Checkout Session.
-
--   **Body:**
-    ```json
-    {
-      "currency": "usd",
-      "items": [
-        {
-          "name": "Product Name",
-          "price": 100,
-          "quantity": 1
-        }
-      ]
-    }
-    ```
-
-### `GET /payments/success`
-
-The URL to which Stripe redirects the user after a successful payment.
-
-### `GET /payments/cancel`
-
-The URL to which Stripe redirects the user after a canceled payment.
-
-### `POST /payments/webhook`
-
-Endpoint to receive and process webhooks from Stripe.
-
----
-
-## License
-
-This project is private and unlicensed.
+- `POST /payments/create-payment-session`: Creates a new Stripe payment session.
+- `GET /payments/success`: The endpoint for successful payment redirection.
+- `GET /payments/cancel`: The endpoint for cancelled payment redirection.
+- `POST /payments/webhook`: Endpoint for receiving Stripe webhook events.
