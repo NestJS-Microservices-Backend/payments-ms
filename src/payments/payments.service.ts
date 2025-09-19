@@ -41,5 +41,4 @@ export class PaymentsService {
     return session;
   }
 
-
 }
